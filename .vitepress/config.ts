@@ -69,7 +69,23 @@ export default defineConfig({
                 ]
               }
             ]
-          }
+          },
+          {
+            text: 'Предметы',
+            base: '/rules/items/',
+            collapsed: true,
+            items: [
+              { text: 'Главная', link: 'index.md' },
+              { text: 'Амуниция и боеприпасы', link: 'ammo.md' },
+              { text: 'Броня', link: 'armor.md' },
+              { text: 'Разведка и шпионаж', link: 'assasin.md' },
+              { text: 'Предметы повседневного обихода', link: 'commons.md' },
+              { text: 'Медицинские технологии', link: 'heal.md' },
+              { text: 'Запчасти и инструменты', link: 'parts.md' },
+              { text: 'Средства передвижения и экзоскафандры', link: 'transport.md' },
+              { text: 'Оружие', link: 'weapons.md' }
+            ]
+          },
         ]
       }
     },

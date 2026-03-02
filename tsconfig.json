@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "types": ["@intlify/unplugin-vue-i18n/messages"],
+    "lib": [
+      "ES2022",
+      "esnext",
+      "dom",
+      "dom.iterable",
+      "scripthost"
+    ]
+  },
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.app.json"
+    }
+  ]
+}

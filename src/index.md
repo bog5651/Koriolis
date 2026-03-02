@@ -11,7 +11,7 @@ hero:
       link: /rules/
     - theme: alt
       text: GitHub
-      link: https://github.com
+      link: https://github.com/bog5651/Koriolis
 
 features:
   - icon: swords

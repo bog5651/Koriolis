@@ -55,6 +55,7 @@ export default defineConfig({
             base: '/rules/common/',
             collapsed: true,
             items: [
+              { text: 'Главная', link: 'index' },
               { text: 'Лики покровителей', link: 'faces' },
               { text: 'Пункты Тьмы', link: 'points-of-darkness' },
               {

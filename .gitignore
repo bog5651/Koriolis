@@ -32,3 +32,5 @@ pnpm-debug.log*
 .vercel
 
 rulbook.pdf
+
+.vercel

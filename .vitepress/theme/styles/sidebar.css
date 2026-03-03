@@ -1,0 +1,82 @@
+/* Style for the sidebar toggle button */
+.vp-sidebar-toggle {
+  display: none;
+}
+
+@media (min-width: 960px) {
+  html:has(aside.VPSidebar) .vp-sidebar-toggle {
+    position: fixed;
+    top: calc(var(--vp-nav-height) + 6px);
+    left: calc(
+      max(32px, calc((100% - (var(--vp-layout-max-width) - 64px)) / 2)) + var(--vp-sidebar-width) -
+        74px
+    );
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    color: var(--vp-c-text-1);
+    background-color: var(--vp-c-bg-soft);
+    border: none;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+  }
+}
+
+.vp-sidebar-toggle:hover {
+  background-color: var(--vp-c-bg-elv);
+  transform: scale(1.05);
+}
+
+.vp-sidebar-toggle:active {
+  transform: scale(0.95);
+}
+
+.vp-sidebar-toggle svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+}
+
+.has-sidebar-toggle.vp-sidebar-hidden .vp-sidebar-toggle {
+  left: 16px;
+}
+
+/* Hide the sidebar when the toggle button is clicked */
+.vp-sidebar-hidden .VPSidebar {
+  transform: translateX(-100%);
+}
+
+/* Transition effects for sidebar visibility */
+.vp-sidebar-transitioning .vp-sidebar-toggle {
+  transition: left 0.3s ease;
+}
+
+.vp-sidebar-transitioning.vp-sidebar-hidden .VPSidebar {
+  transition: transform 0.3s ease;
+}
+
+.vp-sidebar-transitioning .VPSidebar {
+  transition: transform 0.3s ease;
+}
+
+.vp-sidebar-transitioning .VPContent {
+  transition: padding 0.3s ease;
+}
+
+/* Spacing adjustments when sidebar is hidden to leave space for the toggle button */
+.vp-sidebar-hidden .VPLocalNav {
+  padding-left: 20px;
+}
+
+/** To fix the background color of NavBar Title when sidebar is hidden, since the classes of this element are dynamic based on scroll */
+.has-sidebar-toggle.vp-sidebar-hidden .VPNavBar.has-sidebar {
+  background-color: var(--vp-nav-bg-color);
+}
+
+.has-sidebar-toggle.vp-sidebar-hidden .VPNavBar.has-sidebar .divider {
+  background-color: var(--vp-c-divider);
+}

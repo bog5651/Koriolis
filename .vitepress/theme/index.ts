@@ -5,8 +5,10 @@ import type { Theme } from 'vitepress';
 import DefaultTheme from 'vitepress/theme';
 import CoinAnimation from './components/CoinAnimation.vue';
 import HHFeature from './components/HHFeature.vue';
+import { useSidebarToggle } from './hooks/sidebar';
 
 import './styles/index.css';
+import './styles/sidebar.css';
 
 export default {
   extends: DefaultTheme,
@@ -18,5 +20,6 @@ export default {
   },
   enhanceApp({ app }) {
     app.component('HHFeature', HHFeature);
+    useSidebarToggle()
   }
 } satisfies Theme;

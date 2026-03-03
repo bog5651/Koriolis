@@ -164,9 +164,6 @@ export default defineConfig({
           replacement: path
             .resolve(__dirname, './theme/components/HHFeature.vue')
             .replaceAll(path.sep, '/')
-          // fileURLToPath(
-          //   new URL('./theme/components/HHFeature.vue', import.meta.url)
-          // )
         }
       ]
     }

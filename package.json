@@ -17,7 +17,8 @@
   "dependencies": {
     "@babylonjs/core": "^8.41.1",
     "@babylonjs/loaders": "^8.41.1",
-    "lottie-web": "^5.13.0"
+    "lottie-web": "^5.13.0",
+    "vitepress-plugin-sidebar-toggle": "^0.0.4-beta.0"
   },
   "devDependencies": {
     "@tsconfig/node24": "^24.0.1",

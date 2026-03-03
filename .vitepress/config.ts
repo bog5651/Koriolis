@@ -16,19 +16,18 @@ export default defineConfig({
   themeConfig: {
     logo: '/logo.svg',
     nav: [
-      { text: 'Home', link: '/' },
-      { text: 'Правила', link: '/rules/' }
+      { text: 'Главная', link: '/' },
+      { text: 'Правила', link: '/rules/' },
+      { text: 'Предметы', link: '/items/' },
+      { text: 'Амплуа', link: '/classes/' }
     ],
     sidebar: {
       '/rules/': {
         base: '/rules/',
         items: [
           {
-            text: 'Правила',
-            items: [
-              { text: 'Введение', link: 'introduction.md' },
-              { text: 'Основы', link: 'index.md' }
-            ]
+            text: 'Введение',
+            link: 'index.md',
           },
           {
             text: 'Основные правила',
@@ -61,19 +60,26 @@ export default defineConfig({
               {
                 text: 'Достоинства и способности',
                 base: '/rules/common/advantages/',
+                link: 'index',
                 items: [
-                  { text: 'Главная', link: 'index' },
                   { text: 'Дары Ликов', link: 'faces' },
+                  { text: 'Личные', link: 'personal' },
                   { text: 'Достоинства команды', link: 'team' },
                   { text: 'Стигмы пасынков', link: 'stepsons' }
                 ]
               }
             ]
           },
+
+        ]
+      },
+      '/items': {
+        base: '/items/',
+        items: [
           {
             text: 'Предметы',
-            base: '/rules/items/',
-            collapsed: true,
+            base: '/items/',
+            collapsed: false,
             items: [
               { text: 'Главная', link: 'index.md' },
               { text: 'Амуниция и боеприпасы', link: 'ammo.md' },
@@ -84,6 +90,30 @@ export default defineConfig({
               { text: 'Запчасти и инструменты', link: 'parts.md' },
               { text: 'Средства передвижения и экзоскафандры', link: 'transport.md' },
               { text: 'Оружие', link: 'weapons.md' }
+            ]
+          },
+        ]
+      },
+      '/classes': {
+        base: '/classes',
+        items: [
+          {
+            text: 'Амплуа',
+            base: '/classes/',
+            link: 'index.md',
+            collapsed: false,
+            items: [
+              { text: 'Артист', link: 'artist.md' },
+              { text: 'Сетевой Паук', link: 'spider.md' },
+              { text: 'Беглец', link: 'fugitive.md' },
+              { text: 'Негоциант', link: 'merchant.md' },
+              { text: 'Оперативник', link: 'operative.md' },
+              { text: 'Пилот', link: 'pilot.md' },
+              { text: 'Проповедник', link: 'preacher.md' },
+              { text: 'Учёный', link: 'scientist.md' },
+              { text: 'Матрос', link: 'sailor.md' },
+              { text: 'Солдат', link: 'soldier.md' },
+              { text: 'Первопроходец', link: 'trailblazer.md' },
             ]
           },
         ]

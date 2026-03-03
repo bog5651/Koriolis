@@ -17,10 +17,6 @@ export default {
     });
   },
   enhanceApp({ app }) {
-    app.component('HHFeature', HHFeature)
+    app.component('HHFeature', HHFeature);
   }
-
-  // enhanceApp({ app, router, siteData }) {
-  //   // ...
-  // }
 } satisfies Theme;

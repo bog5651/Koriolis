@@ -65,6 +65,8 @@ export default defineConfig({
                   { text: 'Дары Ликов', link: 'faces' },
                   { text: 'Личные', link: 'personal' },
                   { text: 'Достоинства команды', link: 'team' },
+                  { text: 'Импланты и модификации', link: 'impl' },
+                  { text: 'Мистические Практики', link: 'mistic' },
                   { text: 'Стигмы пасынков', link: 'stepsons' }
                 ]
               }

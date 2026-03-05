@@ -129,6 +129,8 @@ export default defineConfig({
     }
   },
   head: [
+    ['meta', { name: 'google-site-verification', content: 'jNJQ_vm2rpm8qHFFyI2znNBamd5frJpM3kOdeC2p9e8' }],
+    ['meta', { name: 'yandex-verification', content: 'ea11a8e3b81b87ad' }],
     ['link', { rel: 'manifest', href: 'site.webmanifest' }],
     ['link', { rel: 'shortcut icon', href: '/favicon.ico' }],
     ['link', { rel: 'icon', href: '/favicon.ico' }],

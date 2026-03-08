@@ -34,10 +34,14 @@ export default defineConfig({
             base: '/rules/core/',
             collapsed: false,
             items: [
-              { text: 'Главная', link: 'index.md' },
               { text: 'Помощь', link: 'help' },
               { text: 'Боевая система', link: 'fight' },
-              { text: 'Травмы и ранения', link: 'injuries' }
+              { text: 'Травмы и ранения', link: 'injuries' },
+              { text: 'Опыт', link: 'exp' },
+              { text: 'Действия', link: 'actions' },
+              { text: 'Снаряжение и Грузоподъёмность', link: 'load' },
+              { text: 'Молитвы', link: 'prayers' },
+              { text: 'Навыки', link: 'skills' },
             ]
           },
           {
@@ -63,7 +67,7 @@ export default defineConfig({
                 link: 'index',
                 items: [
                   { text: 'Дары Ликов', link: 'faces' },
-                  { text: 'Личные', link: 'personal' },
+                  { text: 'Личные Достоинства', link: 'personal' },
                   { text: 'Достоинства команды', link: 'team' },
                   { text: 'Импланты и модификации', link: 'impl' },
                   { text: 'Мистические Практики', link: 'mistic' },

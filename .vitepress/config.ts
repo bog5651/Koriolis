@@ -9,7 +9,7 @@ const links: { url: string; lastmod?: number }[] = [];
 
 export default defineConfig({
   title: 'Кориолис: Третий горизонт',
-  description: 'Example',
+  description: 'Кориолис: Третий Горизонт — полный справочник правил настольной ролевой игры «Кориолис». Основные правила, боевая система, травмы, опыт, снаряжение, создание персонажа, достоинства, амплуа и предметы.',
   titleTemplate: false,
   srcDir: 'src',
   cleanUrls: true,

@@ -19,7 +19,8 @@ export default defineConfig({
       { text: 'Главная', link: '/' },
       { text: 'Правила', link: '/rules/' },
       { text: 'Предметы', link: '/items/' },
-      { text: 'Амплуа', link: '/classes/' }
+      { text: 'Амплуа', link: '/classes/' },
+      { text: 'Утилиты', link: '/utils/' }
     ],
     sidebar: {
       '/rules/': {
@@ -76,7 +77,6 @@ export default defineConfig({
               }
             ]
           },
-
         ]
       },
       '/items': {
@@ -122,6 +122,17 @@ export default defineConfig({
               { text: 'Первопроходец', link: 'trailblazer.md' },
             ]
           },
+        ]
+      },
+      '/utils': {
+        base: '/utils/',
+        items: [
+          {
+            text: 'Утилиты',
+            items: [
+              { text: 'Генератор', link: 'names' },
+            ]
+          }
         ]
       }
     },

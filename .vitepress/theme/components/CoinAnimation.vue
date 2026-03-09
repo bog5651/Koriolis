@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 
-import { use3dAnimation } from './../hooks/3dAnimation';
+import { FILE_NAME, use3dAnimation } from './../hooks/3dAnimation';
 
 const element = ref<HTMLElement>();
 
@@ -16,7 +16,7 @@ async function init(): Promise<void> {
 
   element.value?.appendChild(canvas);
 
-  resize('communicator');
+  resize(FILE_NAME);
 }
 
 onMounted(() => {
@@ -24,7 +24,7 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  dispose('communicator');
+  dispose(FILE_NAME);
 });
 </script>
 

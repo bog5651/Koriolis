@@ -5,6 +5,9 @@ import { Color4, CubeTexture, Engine, Scene, SceneLoader, Vector3 } from '@babyl
 
 const engines: Record<string, Engine> = {};
 
+export const FILE_NAME = 'coin'; //communicator
+export const FILE_ZOOM = 2.5; //0.2
+
 export const use3dAnimation = () => {
   async function render(fileName: string, radius = 0): Promise<HTMLCanvasElement> {
     dispose(fileName);
@@ -68,7 +71,7 @@ export const use3dAnimation = () => {
   }
 
   async function renderCoin(): Promise<HTMLCanvasElement> {
-    return render('communicator', 0.2);
+    return render(FILE_NAME, FILE_ZOOM);
   }
 
   return {

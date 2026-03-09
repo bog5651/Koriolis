@@ -9,7 +9,7 @@ const links: { url: string; lastmod?: number }[] = [];
 
 export default defineConfig({
   title: 'Кориолис: Третий горизонт',
-  description: 'Кориолис: Третий Горизонт — полный справочник правил настольной ролевой игры «Кориолис». Основные правила, боевая система, травмы, опыт, снаряжение, создание персонажа, достоинства, амплуа и предметы.',
+  description: 'Кориолис: Третий Горизонт — полный справочник правил настольной ролевой игры «Кориолис». Онлайн справочник по основным правилам, боевая система, травмы, опыт, снаряжение, создание персонажа, достоинства, амплуа и предметы.',
   titleTemplate: false,
   srcDir: 'src',
   cleanUrls: true,
@@ -141,7 +141,11 @@ export default defineConfig({
       options: {
         detailedView: true
       }
-    }
+    },
+    footer: {
+      message: 'Все права на Кориолис принадлежат Paradox Interactive AB.',
+      copyright: '© 2025 — Сайт-справочник не является официальным продуктом Paradox Interactive.'
+    },
   },
   head: [
     ['meta', { name: 'google-site-verification', content: 'jNJQ_vm2rpm8qHFFyI2znNBamd5frJpM3kOdeC2p9e8' }],

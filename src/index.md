@@ -17,7 +17,7 @@ features:
   - icon: swords
     title: Основные правила
     details: Боевая система, помощь персонажей и справочник по травмам и ранениям
-    link: /rules/core/
+    link: /rules/
     linkText: Открыть
 
   - icon: create

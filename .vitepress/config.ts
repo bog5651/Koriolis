@@ -36,13 +36,24 @@ export default defineConfig({
             collapsed: false,
             items: [
               { text: 'Помощь', link: 'help' },
-              { text: 'Боевая система', link: 'fight' },
               { text: 'Травмы и ранения', link: 'injuries' },
               { text: 'Опыт', link: 'exp' },
               { text: 'Действия', link: 'actions' },
               { text: 'Снаряжение и Грузоподъёмность', link: 'load' },
               { text: 'Молитвы', link: 'prayers' },
               { text: 'Навыки', link: 'skills' },
+            ]
+          },
+          {
+            text: 'Боевая система',
+            base: '/rules/fight/',
+            collapsed: false,
+            items:[
+              { text: 'Инициатива', link: 'initiative' },
+              { text: 'Ближний Бой', link: 'melee-fight' },
+              { text: 'Дальний Бой', link: 'range-fight' },
+              { text: 'Укрытия', link: 'shelter' },
+              { text: 'Транспортный Бой', link: 'transport' }
             ]
           },
           {

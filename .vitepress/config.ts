@@ -20,6 +20,7 @@ export default defineConfig({
       { text: 'Правила', link: '/rules/' },
       { text: 'Предметы', link: '/items/' },
       { text: 'Амплуа', link: '/classes/' },
+      { text: 'Корабли', link: '/ships/intro' },
       { text: 'Утилиты', link: '/utils/' }
     ],
     sidebar: {
@@ -142,6 +143,21 @@ export default defineConfig({
             text: 'Утилиты',
             items: [
               { text: 'Генератор', link: 'names' },
+            ]
+          }
+        ]
+      },
+      '/ships': {
+        base: '/ships/',
+        items: [
+          {
+            text: 'Корабли',
+            items: [
+              { text: 'Введение', link: 'intro' },
+              { text: 'Создание Корабля', link: 'create' },
+              { text: 'Корабли', link: 'ships' },
+              { text: 'Модули', link: 'modules' },
+              { text: 'Усовершенствования', link: 'improvements' },
             ]
           }
         ]

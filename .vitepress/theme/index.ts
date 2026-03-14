@@ -21,5 +21,5 @@ export default {
   enhanceApp({ app }) {
     app.component('HHFeature', HHFeature);
     useSidebarToggle()
-  }
+  },
 } satisfies Theme;

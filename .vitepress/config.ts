@@ -158,6 +158,8 @@ export default defineConfig({
               { text: 'Корабли', link: 'ships' },
               { text: 'Модули', link: 'modules' },
               { text: 'Усовершенствования', link: 'improvements' },
+              { text: 'Тех. обслуживание', link: 'maintenance' },
+              { text: 'Сражения', link: 'fight' },
             ]
           }
         ]

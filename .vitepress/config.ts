@@ -143,6 +143,7 @@ export default defineConfig({
             text: 'Утилиты',
             items: [
               { text: 'Генератор', link: 'names' },
+              { text: 'Калькулятор стрельбы', link: 'shooting' },
             ]
           }
         ]

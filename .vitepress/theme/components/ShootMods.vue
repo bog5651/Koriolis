@@ -17,8 +17,8 @@ const fireTypeModifiers: ModifierOption[] = [
 const additionalModifiers: ModifierOption[] = [
   { id: 1, label: 'Упор', value: +1 },
   { id: 2, label: 'Штраф превышения дальности', value: -3 },
-  { id: 3, label: 'Скрытность', value: +3 },
-  { id: 4, label: 'Цель обездвижена', value: +3 },
+  { id: 3, label: 'Скрытность/Цель обездвижена', value: +3 },
+  { id: 4, label: 'Исподтишка', value: +2 },
   { id: 5, label: 'Лежит на полу', value: -1 },
 ];
 

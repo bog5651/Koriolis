@@ -105,7 +105,6 @@ function handleSituationalToggle(id: number, isChecked: boolean) {
   }
 }
 
-// Функция для определения класса цвета по значению модификатора
 function getModifierColorClass(value: number): string {
   if (value < 0) return 'negative';
   if (value > 0) return 'positive';

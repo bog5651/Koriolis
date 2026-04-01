@@ -52,7 +52,7 @@ const additionalModifiers: ModifierOption[] = [
   { type: ModifierType.ADDITIONAL_RANGE_PENALTY, label: 'Превышения дальности оружия', value: -3 },
   { type: ModifierType.ADDITIONAL_STEALTH, label: 'Цель обездвижена/Не знает где стрелок', value: +3 },
   { type: ModifierType.ADDITIONAL_BACKSTAB, label: 'Исподтишка', value: +2 },
-  { type: ModifierType.ADDITIONAL_FLOOR, label: 'Лежит на полу', value: -1 },
+  { type: ModifierType.ADDITIONAL_FLOOR, label: 'Цель лежит на полу', value: -1 },
 ];
 
 const rangeModifiers: ModifierOption[] = [

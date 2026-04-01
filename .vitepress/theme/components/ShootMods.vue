@@ -102,8 +102,10 @@ const totalModifier = computed(() => {
   }, 0);
 
   if (rangeType.value !== null) {
-    const modifier = rangeModifiers.find(m => m.type === rangeType.value);
-    sum += modifier ? modifier.value : 0;
+    if (!additionalSelection.value.includes(ModifierType.ADDITIONAL_STEALTH)) {
+      const modifier = rangeModifiers.find(m => m.type === rangeType.value);
+      sum += modifier ? modifier.value : 0;
+    }
   }
 
   if (targetSizeType.value !== null) {

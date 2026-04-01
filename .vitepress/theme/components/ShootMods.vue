@@ -140,17 +140,14 @@ function handleSituationalToggle(type: ModifierType, isChecked: boolean) {
 }
 
 function isAdditionalOptionDisabled(type: ModifierType): boolean {
-  // "Упор" is disabled when fire type is "На вскидку"
   if (type === ModifierType.ADDITIONAL_USHOR && fireType.value === ModifierType.FIRE_TYPE_SNAP) {
     return true;
   }
 
-  // "Скрытность/Цель обездвижена" is disabled when range is not "Нулевая"
   if (type === ModifierType.ADDITIONAL_STEALTH && rangeType.value !== ModifierType.RANGE_ZERO) {
     return true;
   }
 
-  // "Скрытность/Цель обездвижена" is disabled when range is not "Нулевая"
   if (type === ModifierType.ADDITIONAL_RANGE_PENALTY && (rangeType.value === ModifierType.RANGE_ZERO || rangeType.value === ModifierType.RANGE_SHORT)) {
     return true;
   }

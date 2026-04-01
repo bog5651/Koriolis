@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted, onUnmounted } from 'vue';
 
 interface ModifierOption {
   id: number;
   label: string;
   value: number;
 }
+
+// ... existing arrays: fireTypeModifiers, additionalModifiers, etc.
 
 const fireTypeModifiers: ModifierOption[] = [
   { id: 1, label: 'На вскидку', value: -2 },
@@ -44,6 +46,8 @@ const situationalModifiers: ModifierOption[] = [
   { id: 5, label: '', value: +2 },
   { id: 6, label: '', value: +3 },
 ];
+
+// ... existing refs, computed, handlers ...
 
 const fireTypeId = ref<number | null>(2);
 const additionalSelection = ref<number[]>([]);
@@ -101,13 +105,30 @@ function handleSituationalToggle(id: number, isChecked: boolean) {
     situationalSelection.value = situationalSelection.value.filter(i => i !== id);
   }
 }
+
+const isDark = ref(false);
+
+function updateTheme() {
+  isDark.value = document.documentElement.classList.contains('dark');
+}
+
+onMounted(() => {
+  updateTheme();
+  document.addEventListener('DOMContentLoaded', updateTheme);
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateTheme);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('DOMContentLoaded', updateTheme);
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateTheme);
+});
 </script>
 
 <template>
-  <div class="modifiers-container">
+  <div class="modifiers-container" :class="{ 'dark': isDark }">
     <div class="columns-container">
       <div class="column left-column">
-        <div class="section">
+        <div class="section" :class="{ 'dark': isDark }">
           <h4>Тип выстрела</h4>
           <div class="radio-group">
             <label
@@ -121,12 +142,12 @@ function handleSituationalToggle(id: number, isChecked: boolean) {
                 v-model="fireTypeId"
                 name="fireType"
               />
-              {{ option.label }} ({{ option.value > 0 ? '+' : '' }}{{ option.value }})
+              {{ option.label }} (<span :class="{ 'negative': option.value < 0, 'neutral': option.value === 0, 'positive': option.value > 0 }">{{ option.value > 0 ? '+' : '' }}{{ option.value }}</span>)
             </label>
           </div>
         </div>
 
-        <div class="section">
+        <div class="section" :class="{ 'dark': isDark }">
           <h4>Дополнительные</h4>
           <div class="checkbox-group">
             <label
@@ -139,14 +160,14 @@ function handleSituationalToggle(id: number, isChecked: boolean) {
                 :value="option.id"
                 @change="handleAdditionalToggle(option.id, ($event.target as HTMLInputElement).checked)"
               />
-              {{ option.label }} ({{ option.value > 0 ? '+' : '' }}{{ option.value }})
+              {{ option.label }} (<span :class="{ 'negative': option.value < 0, 'neutral': option.value === 0, 'positive': option.value > 0 }">{{ option.value > 0 ? '+' : '' }}{{ option.value }}</span>)
             </label>
           </div>
         </div>
       </div>
 
       <div class="column right-column">
-        <div class="section">
+        <div class="section" :class="{ 'dark': isDark }">
           <h4>Дальность</h4>
           <div class="radio-group">
             <label
@@ -160,12 +181,12 @@ function handleSituationalToggle(id: number, isChecked: boolean) {
                 v-model="rangeId"
                 name="range"
               />
-              {{ option.label }} ({{ option.value > 0 ? '+' : '' }}{{ option.value }})
+              {{ option.label }} (<span :class="{ 'negative': option.value < 0, 'neutral': option.value === 0, 'positive': option.value > 0 }">{{ option.value > 0 ? '+' : '' }}{{ option.value }}</span>)
             </label>
           </div>
         </div>
 
-        <div class="section">
+        <div class="section" :class="{ 'dark': isDark }">
           <h4>Размер цели</h4>
           <div class="radio-group">
             <label
@@ -179,12 +200,12 @@ function handleSituationalToggle(id: number, isChecked: boolean) {
                 v-model="targetSizeId"
                 name="targetSize"
               />
-              {{ option.label }} ({{ option.value > 0 ? '+' : '' }}{{ option.value }})
+              {{ option.label }} (<span :class="{ 'negative': option.value < 0, 'neutral': option.value === 0, 'positive': option.value > 0 }">{{ option.value > 0 ? '+' : '' }}{{ option.value }}</span>)
             </label>
           </div>
         </div>
 
-        <div class="section">
+        <div class="section" :class="{ 'dark': isDark }">
           <h4>Ситуативные</h4>
           <div class="situational-container">
             <div class="situational-subcolumn">
@@ -198,7 +219,7 @@ function handleSituationalToggle(id: number, isChecked: boolean) {
                   :value="option.id"
                   @change="handleSituationalToggle(option.id, ($event.target as HTMLInputElement).checked)"
                 />
-                {{ option.label }} ({{ option.value > 0 ? '+' : '' }}{{ option.value }})
+                {{ option.label }} (<span :class="{ 'negative': option.value < 0, 'neutral': option.value === 0, 'positive': option.value > 0 }">{{ option.value > 0 ? '+' : '' }}{{ option.value }}</span>)
               </label>
             </div>
             <div class="situational-subcolumn">
@@ -212,7 +233,7 @@ function handleSituationalToggle(id: number, isChecked: boolean) {
                   :value="option.id"
                   @change="handleSituationalToggle(option.id, ($event.target as HTMLInputElement).checked)"
                 />
-                {{ option.label }} ({{ option.value > 0 ? '+' : '' }}{{ option.value }})
+                {{ option.label }} (<span :class="{ 'negative': option.value < 0, 'neutral': option.value === 0, 'positive': option.value > 0 }">{{ option.value > 0 ? '+' : '' }}{{ option.value }}</span>)
               </label>
             </div>
           </div>
@@ -220,8 +241,12 @@ function handleSituationalToggle(id: number, isChecked: boolean) {
       </div>
     </div>
 
-    <div class="total-section">
-      <p>Сумма модификаторов: <strong>{{ totalModifier }}</strong></p>
+    <div class="total-section" :class="{ 'dark': isDark }">
+      <p>Сумма модификаторов:
+        <strong :class="{ 'negative': totalModifier < 0, 'neutral': totalModifier === 0, 'positive': totalModifier > 0 }">
+          {{ totalModifier }}
+        </strong>
+      </p>
     </div>
   </div>
 </template>
@@ -231,9 +256,15 @@ function handleSituationalToggle(id: number, isChecked: boolean) {
   max-width: 900px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color: var(--vp-c-bg);
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: var(--vp-c-text-1);
+}
+
+.dark .modifiers-container {
+  background-color: var(--vp-c-bg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .columns-container {
@@ -249,15 +280,22 @@ function handleSituationalToggle(id: number, isChecked: boolean) {
 .section {
   margin-bottom: 15px;
   padding: 10px;
-  background-color: #ffffff;
+  background-color: var(--vp-c-bg-soft);
   border-radius: 6px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  color: var(--vp-c-text-1);
+}
+
+.dark .section {
+  background-color: var(--vp-c-bg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 h4 {
   margin: 0 0 10px 0;
-  color: #333;
+  color: var(--vp-c-text-1);
   font-size: 14px;
+  font-weight: 600;
 }
 
 .radio-group,
@@ -273,11 +311,32 @@ h4 {
   align-items: center;
   font-size: 13px;
   cursor: pointer;
+  color: var(--vp-c-text-2);
+}
+
+.dark .radio-option,
+.dark .checkbox-option {
+  color: var(--vp-c-text-2);
 }
 
 .radio-option input,
 .checkbox-option input {
   margin-right: 8px;
+  accent-color: var(--vp-c-indigo-1);
+}
+
+.negative {
+  color: var(--vp-c-red-1);
+  font-weight: bold;
+}
+
+.neutral {
+  color: var(--vp-c-text-2);
+}
+
+.positive {
+  color: var(--vp-c-green-1);
+  font-weight: bold;
 }
 
 .situational-container {
@@ -295,9 +354,14 @@ h4 {
 .total-section {
   margin-top: 20px;
   padding: 15px;
-  background-color: #e9f5e9;
+  background-color: var(--vp-c-bg-soft);
   border-radius: 6px;
   text-align: center;
+  border: 1px solid var(--vp-c-border);
+}
+
+.dark .total-section {
+  background-color: var(--vp-c-bg);
 }
 
 .total-section p {
@@ -307,7 +371,6 @@ h4 {
 
 .total-section strong {
   font-size: 24px;
-  color: #2e7d32;
 }
 
 @media (max-width: 768px) {

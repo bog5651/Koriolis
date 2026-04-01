@@ -2,94 +2,103 @@
 import { computed, ref } from 'vue';
 
 interface ModifierOption {
+  id: number;
   label: string;
   value: number;
 }
 
-// Тип выстрела (только один, radio)
 const fireTypeModifiers: ModifierOption[] = [
-  { label: 'На вскидку', value: -2 },
-  { label: 'Обычный', value: 0 },
-  { label: 'Прицельный', value: +2 },
-  { label: 'Автоматический', value: -2 },
+  { id: 1, label: 'На вскидку', value: -2 },
+  { id: 2, label: 'Обычный', value: 0 },
+  { id: 3, label: 'Прицельный', value: +2 },
+  { id: 4, label: 'Автоматический', value: -2 },
 ];
 
-// Дополнительные модификаторы (множественный выбор, checkbox)
 const additionalModifiers: ModifierOption[] = [
-  { label: 'Упор', value: +1 },
-  { label: 'Штраф превышения дальности', value: -3 },
-  { label: 'Скрытность', value: +3 },
-  { label: 'Цель обездвижена', value: +3 },
+  { id: 1, label: 'Упор', value: +1 },
+  { id: 2, label: 'Штраф превышения дальности', value: -3 },
+  { id: 3, label: 'Скрытность', value: +3 },
+  { id: 4, label: 'Цель обездвижена', value: +3 },
+  { id: 5, label: 'Лежит на полу', value: -1 },
 ];
 
-// Дальность (только один, radio)
 const rangeModifiers: ModifierOption[] = [
-  { label: 'Нулевая', value: -3 },
-  { label: 'Ближняя', value: 0 },
-  { label: 'Дальняя', value: -1 },
-  { label: 'Предельная', value: -2 },
+  { id: 1, label: 'Нулевая', value: -3 },
+  { id: 2, label: 'Ближняя', value: 0 },
+  { id: 3, label: 'Дальняя', value: -1 },
+  { id: 4, label: 'Предельная', value: -2 },
 ];
 
-// Размер цели (только один, radio)
 const targetSizeModifiers: ModifierOption[] = [
-  { label: 'Меньше человека/лежит на полу', value: -1 },
-  { label: 'Обычная', value: 0 },
-  { label: 'Крупная', value: +1 },
-  { label: 'Гигантская', value: +2 },
+  { id: 1, label: 'Меньше человека', value: -1 },
+  { id: 2, label: 'Обычная', value: 0 },
+  { id: 3, label: 'Крупная', value: +1 },
+  { id: 4, label: 'Гигантская', value: +2 },
 ];
 
-// Ситуативные модификаторы (множественный выбор, checkbox)
 const situationalModifiers: ModifierOption[] = [
-  { label: '', value: -3 },
-  { label: '', value: -2 },
-  { label: '', value: -1 },
-  { label: '', value: +1 },
-  { label: '', value: +2 },
-  { label: '', value: +3 },
+  { id: 1, label: '', value: -3 },
+  { id: 2, label: '', value: -2 },
+  { id: 3, label: '', value: -1 },
+  { id: 4, label: '', value: +1 },
+  { id: 5, label: '', value: +2 },
+  { id: 6, label: '', value: +3 },
 ];
 
-// Состояние
-const fireType = ref<number | null>(0);
+const fireTypeId = ref<number | null>(2);
 const additionalSelection = ref<number[]>([]);
-const rangeSelection = ref<number | null>(0);
-const targetSizeSelection = ref<number | null>(0);
+const rangeId = ref<number | null>(2);
+const targetSizeId = ref<number | null>(2);
 const situationalSelection = ref<number[]>([]);
 
 const totalModifier = computed(() => {
   let sum = 0;
 
-  if (fireType.value !== null) {
-    sum += fireType.value;
+  if (fireTypeId.value !== null) {
+    const modifier = fireTypeModifiers.find(m => m.id === fireTypeId.value);
+    sum += modifier ? modifier.value : 0;
   }
 
-  sum += additionalSelection.value.reduce((acc, val) => acc + val, 0);
+  sum += additionalSelection.value.reduce((acc, id) => {
+    const modifier = additionalModifiers.find(m => m.id === id);
+    return acc + (modifier ? modifier.value : 0);
+  }, 0);
 
-  if (rangeSelection.value !== null) {
-    sum += rangeSelection.value;
+  if (rangeId.value !== null) {
+    const modifier = rangeModifiers.find(m => m.id === rangeId.value);
+    sum += modifier ? modifier.value : 0;
   }
 
-  if (targetSizeSelection.value !== null) {
-    sum += targetSizeSelection.value;
+  if (targetSizeId.value !== null) {
+    const modifier = targetSizeModifiers.find(m => m.id === targetSizeId.value);
+    sum += modifier ? modifier.value : 0;
   }
 
-  sum += situationalSelection.value.reduce((acc, val) => acc + val, 0);
+  sum += situationalSelection.value.reduce((acc, id) => {
+    const modifier = situationalModifiers.find(m => m.id === id);
+    return acc + (modifier ? modifier.value : 0);
+  }, 0);
 
   return sum;
 });
 
-function handleAdditionalToggle(value: number, isChecked: boolean) {
+function handleAdditionalToggle(id: number, isChecked: boolean) {
   if (isChecked) {
-    additionalSelection.value.push(value);
+    if (!additionalSelection.value.includes(id)) {
+      additionalSelection.value.push(id);
+    }
   } else {
-    additionalSelection.value = additionalSelection.value.filter(v => v !== value);
+    additionalSelection.value = additionalSelection.value.filter(i => i !== id);
   }
 }
 
-function handleSituationalToggle(value: number, isChecked: boolean) {
+function handleSituationalToggle(id: number, isChecked: boolean) {
   if (isChecked) {
-    situationalSelection.value.push(value);
+    if (!situationalSelection.value.includes(id)) {
+      situationalSelection.value.push(id);
+    }
   } else {
-    situationalSelection.value = situationalSelection.value.filter(v => v !== value);
+    situationalSelection.value = situationalSelection.value.filter(i => i !== id);
   }
 }
 </script>
@@ -101,11 +110,15 @@ function handleSituationalToggle(value: number, isChecked: boolean) {
         <div class="section">
           <h4>Тип выстрела</h4>
           <div class="radio-group">
-            <label v-for="option in fireTypeModifiers" :key="option.label" class="radio-option">
+            <label
+              v-for="option in fireTypeModifiers"
+              :key="option.id"
+              class="radio-option"
+            >
               <input
                 type="radio"
-                :value="option.value"
-                v-model="fireType"
+                :value="option.id"
+                v-model="fireTypeId"
                 name="fireType"
               />
               {{ option.label }} ({{ option.value > 0 ? '+' : '' }}{{ option.value }})
@@ -116,11 +129,15 @@ function handleSituationalToggle(value: number, isChecked: boolean) {
         <div class="section">
           <h4>Дополнительные</h4>
           <div class="checkbox-group">
-            <label v-for="option in additionalModifiers" :key="option.label" class="checkbox-option">
+            <label
+              v-for="option in additionalModifiers"
+              :key="option.id"
+              class="checkbox-option"
+            >
               <input
                 type="checkbox"
-                :value="option.value"
-                @change="handleAdditionalToggle(option.value, ($event.target as HTMLInputElement).checked)"
+                :value="option.id"
+                @change="handleAdditionalToggle(option.id, ($event.target as HTMLInputElement).checked)"
               />
               {{ option.label }} ({{ option.value > 0 ? '+' : '' }}{{ option.value }})
             </label>
@@ -132,11 +149,15 @@ function handleSituationalToggle(value: number, isChecked: boolean) {
         <div class="section">
           <h4>Дальность</h4>
           <div class="radio-group">
-            <label v-for="option in rangeModifiers" :key="option.label" class="radio-option">
+            <label
+              v-for="option in rangeModifiers"
+              :key="option.id"
+              class="radio-option"
+            >
               <input
                 type="radio"
-                :value="option.value"
-                v-model="rangeSelection"
+                :value="option.id"
+                v-model="rangeId"
                 name="range"
               />
               {{ option.label }} ({{ option.value > 0 ? '+' : '' }}{{ option.value }})
@@ -147,11 +168,15 @@ function handleSituationalToggle(value: number, isChecked: boolean) {
         <div class="section">
           <h4>Размер цели</h4>
           <div class="radio-group">
-            <label v-for="option in targetSizeModifiers" :key="option.label" class="radio-option">
+            <label
+              v-for="option in targetSizeModifiers"
+              :key="option.id"
+              class="radio-option"
+            >
               <input
                 type="radio"
-                :value="option.value"
-                v-model="targetSizeSelection"
+                :value="option.id"
+                v-model="targetSizeId"
                 name="targetSize"
               />
               {{ option.label }} ({{ option.value > 0 ? '+' : '' }}{{ option.value }})
@@ -161,15 +186,35 @@ function handleSituationalToggle(value: number, isChecked: boolean) {
 
         <div class="section">
           <h4>Ситуативные</h4>
-          <div class="checkbox-group">
-            <label v-for="option in situationalModifiers" :key="option.label" class="checkbox-option">
-              <input
-                type="checkbox"
-                :value="option.value"
-                @change="handleSituationalToggle(option.value, ($event.target as HTMLInputElement).checked)"
-              />
-              {{ option.label }} ({{ option.value > 0 ? '+' : '' }}{{ option.value }})
-            </label>
+          <div class="situational-container">
+            <div class="situational-subcolumn">
+              <label
+                v-for="option in situationalModifiers.slice(0, 3)"
+                :key="option.id"
+                class="checkbox-option"
+              >
+                <input
+                  type="checkbox"
+                  :value="option.id"
+                  @change="handleSituationalToggle(option.id, ($event.target as HTMLInputElement).checked)"
+                />
+                {{ option.label }} ({{ option.value > 0 ? '+' : '' }}{{ option.value }})
+              </label>
+            </div>
+            <div class="situational-subcolumn">
+              <label
+                v-for="option in situationalModifiers.slice(3)"
+                :key="option.id"
+                class="checkbox-option"
+              >
+                <input
+                  type="checkbox"
+                  :value="option.id"
+                  @change="handleSituationalToggle(option.id, ($event.target as HTMLInputElement).checked)"
+                />
+                {{ option.label }} ({{ option.value > 0 ? '+' : '' }}{{ option.value }})
+              </label>
+            </div>
           </div>
         </div>
       </div>
@@ -235,6 +280,18 @@ h4 {
   margin-right: 8px;
 }
 
+.situational-container {
+  display: flex;
+  gap: 15px;
+}
+
+.situational-subcolumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .total-section {
   margin-top: 20px;
   padding: 15px;
@@ -260,6 +317,10 @@ h4 {
 
   .column {
     min-width: auto;
+  }
+
+  .situational-container {
+    flex-direction: column;
   }
 }
 </style>

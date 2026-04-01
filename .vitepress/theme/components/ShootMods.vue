@@ -1,9 +1,39 @@
 <script setup lang="ts">
 import { useData } from 'vitepress';
-import { computed, ref, onMounted, onUnmounted } from 'vue';
+import { computed, ref, onMounted, onUnmounted, watch } from 'vue';
+
+enum ModifierType {
+  FIRE_TYPE_SNAP = 'fire_snap',
+  FIRE_TYPE_NORMAL = 'fire_normal',
+  FIRE_TYPE_AIMED = 'fire_aimed',
+  FIRE_TYPE_AUTO = 'fire_auto',
+
+  ADDITIONAL_USHOR = 'additional_ushor',
+  ADDITIONAL_RANGE_PENALTY = 'additional_range_penalty',
+  ADDITIONAL_STEALTH = 'additional_stealth',
+  ADDITIONAL_BACKSTAB = 'additional_backstab',
+  ADDITIONAL_FLOOR = 'additional_floor',
+
+  RANGE_ZERO = 'range_zero',
+  RANGE_SHORT = 'range_short',
+  RANGE_LONG = 'range_long',
+  RANGE_EXTREME = 'range_extreme',
+
+  TARGET_SMALL = 'target_small',
+  TARGET_NORMAL = 'target_normal',
+  TARGET_LARGE = 'target_large',
+  TARGET_HUGE = 'target_huge',
+
+  SITUATIONAL_NEG3 = 'situational_neg3',
+  SITUATIONAL_NEG2 = 'situational_neg2',
+  SITUATIONAL_NEG1 = 'situational_neg1',
+  SITUATIONAL_POS1 = 'situational_pos1',
+  SITUATIONAL_POS2 = 'situational_pos2',
+  SITUATIONAL_POS3 = 'situational_pos3',
+}
 
 interface ModifierOption {
-  id: number;
+  type: ModifierType;
   label: string;
   value: number;
 }
@@ -11,98 +41,121 @@ interface ModifierOption {
 const { isDark } = useData();
 
 const fireTypeModifiers: ModifierOption[] = [
-  { id: 1, label: 'На вскидку', value: -2 },
-  { id: 2, label: 'Обычный', value: 0 },
-  { id: 3, label: 'Прицельный', value: +2 },
-  { id: 4, label: 'Автоматический', value: -2 },
+  { type: ModifierType.FIRE_TYPE_SNAP, label: 'На вскидку', value: -2 },
+  { type: ModifierType.FIRE_TYPE_NORMAL, label: 'Обычный', value: 0 },
+  { type: ModifierType.FIRE_TYPE_AIMED, label: 'Прицельный', value: +2 },
+  { type: ModifierType.FIRE_TYPE_AUTO, label: 'Автоматический', value: -2 },
 ];
 
 const additionalModifiers: ModifierOption[] = [
-  { id: 1, label: 'Упор', value: +1 },
-  { id: 2, label: 'Штраф превышения дальности', value: -3 },
-  { id: 3, label: 'Скрытность/Цель обездвижена', value: +3 },
-  { id: 4, label: 'Исподтишка', value: +2 },
-  { id: 5, label: 'Лежит на полу', value: -1 },
+  { type: ModifierType.ADDITIONAL_USHOR, label: 'Упор', value: +1 },
+  { type: ModifierType.ADDITIONAL_RANGE_PENALTY, label: 'Превышения дальности оружия', value: -3 },
+  { type: ModifierType.ADDITIONAL_STEALTH, label: 'Цель обездвижена/Не знает где стрелок', value: +3 },
+  { type: ModifierType.ADDITIONAL_BACKSTAB, label: 'Исподтишка', value: +2 },
+  { type: ModifierType.ADDITIONAL_FLOOR, label: 'Лежит на полу', value: -1 },
 ];
 
 const rangeModifiers: ModifierOption[] = [
-  { id: 1, label: 'Нулевая', value: -3 },
-  { id: 2, label: 'Ближняя', value: 0 },
-  { id: 3, label: 'Дальняя', value: -1 },
-  { id: 4, label: 'Предельная', value: -2 },
+  { type: ModifierType.RANGE_ZERO, label: 'Нулевая', value: -3 },
+  { type: ModifierType.RANGE_SHORT, label: 'Ближняя', value: 0 },
+  { type: ModifierType.RANGE_LONG, label: 'Дальняя', value: -1 },
+  { type: ModifierType.RANGE_EXTREME, label: 'Предельная', value: -2 },
 ];
 
 const targetSizeModifiers: ModifierOption[] = [
-  { id: 1, label: 'Меньше человека', value: -1 },
-  { id: 2, label: 'Обычная', value: 0 },
-  { id: 3, label: 'Крупная', value: +1 },
-  { id: 4, label: 'Гигантская', value: +2 },
+  { type: ModifierType.TARGET_SMALL, label: 'Меньше человека', value: -1 },
+  { type: ModifierType.TARGET_NORMAL, label: 'Обычная', value: 0 },
+  { type: ModifierType.TARGET_LARGE, label: 'Крупная', value: +1 },
+  { type: ModifierType.TARGET_HUGE, label: 'Гигантская', value: +2 },
 ];
 
 const situationalModifiers: ModifierOption[] = [
-  { id: 1, label: '', value: -3 },
-  { id: 2, label: '', value: -2 },
-  { id: 3, label: '', value: -1 },
-  { id: 4, label: '', value: +1 },
-  { id: 5, label: '', value: +2 },
-  { id: 6, label: '', value: +3 },
+  { type: ModifierType.SITUATIONAL_NEG3, label: '', value: -3 },
+  { type: ModifierType.SITUATIONAL_NEG2, label: '', value: -2 },
+  { type: ModifierType.SITUATIONAL_NEG1, label: '', value: -1 },
+  { type: ModifierType.SITUATIONAL_POS1, label: '', value: +1 },
+  { type: ModifierType.SITUATIONAL_POS2, label: '', value: +2 },
+  { type: ModifierType.SITUATIONAL_POS3, label: '', value: +3 },
 ];
 
-const fireTypeId = ref<number | null>(2);
-const additionalSelection = ref<number[]>([]);
-const rangeId = ref<number | null>(2);
-const targetSizeId = ref<number | null>(2);
-const situationalSelection = ref<number[]>([]);
+const fireType = ref<ModifierType | null>(ModifierType.FIRE_TYPE_NORMAL);
+const additionalSelection = ref<ModifierType[]>([]);
+const rangeType = ref<ModifierType | null>(ModifierType.RANGE_SHORT);
+const targetSizeType = ref<ModifierType | null>(ModifierType.TARGET_NORMAL);
+const situationalSelection = ref<ModifierType[]>([]);
+
+const showWangingRangePenalties = computed(() => {
+  return additionalSelection.value.includes(ModifierType.ADDITIONAL_STEALTH);
+});
 
 const totalModifier = computed(() => {
   let sum = 0;
 
-  if (fireTypeId.value !== null) {
-    const modifier = fireTypeModifiers.find(m => m.id === fireTypeId.value);
+  if (fireType.value !== null) {
+    const modifier = fireTypeModifiers.find(m => m.type === fireType.value);
     sum += modifier ? modifier.value : 0;
   }
 
-  sum += additionalSelection.value.reduce((acc, id) => {
-    const modifier = additionalModifiers.find(m => m.id === id);
+  sum += additionalSelection.value.reduce((acc, type) => {
+    const modifier = additionalModifiers.find(m => m.type === type);
     return acc + (modifier ? modifier.value : 0);
   }, 0);
 
-  if (rangeId.value !== null) {
-    const modifier = rangeModifiers.find(m => m.id === rangeId.value);
+  if (rangeType.value !== null) {
+    const modifier = rangeModifiers.find(m => m.type === rangeType.value);
     sum += modifier ? modifier.value : 0;
   }
 
-  if (targetSizeId.value !== null) {
-    const modifier = targetSizeModifiers.find(m => m.id === targetSizeId.value);
+  if (targetSizeType.value !== null) {
+    const modifier = targetSizeModifiers.find(m => m.type === targetSizeType.value);
     sum += modifier ? modifier.value : 0;
   }
 
-  sum += situationalSelection.value.reduce((acc, id) => {
-    const modifier = situationalModifiers.find(m => m.id === id);
+  sum += situationalSelection.value.reduce((acc, type) => {
+    const modifier = situationalModifiers.find(m => m.type === type);
     return acc + (modifier ? modifier.value : 0);
   }, 0);
 
   return sum;
 });
 
-function handleAdditionalToggle(id: number, isChecked: boolean) {
+function handleAdditionalToggle(type: ModifierType, isChecked: boolean) {
   if (isChecked) {
-    if (!additionalSelection.value.includes(id)) {
-      additionalSelection.value.push(id);
+    if (!additionalSelection.value.includes(type)) {
+      additionalSelection.value.push(type);
     }
   } else {
-    additionalSelection.value = additionalSelection.value.filter(i => i !== id);
+    additionalSelection.value = additionalSelection.value.filter(t => t !== type);
   }
 }
 
-function handleSituationalToggle(id: number, isChecked: boolean) {
+function handleSituationalToggle(type: ModifierType, isChecked: boolean) {
   if (isChecked) {
-    if (!situationalSelection.value.includes(id)) {
-      situationalSelection.value.push(id);
+    if (!situationalSelection.value.includes(type)) {
+      situationalSelection.value.push(type);
     }
   } else {
-    situationalSelection.value = situationalSelection.value.filter(i => i !== id);
+    situationalSelection.value = situationalSelection.value.filter(t => t !== type);
   }
+}
+
+function isAdditionalOptionDisabled(type: ModifierType): boolean {
+  // "Упор" is disabled when fire type is "На вскидку"
+  if (type === ModifierType.ADDITIONAL_USHOR && fireType.value === ModifierType.FIRE_TYPE_SNAP) {
+    return true;
+  }
+
+  // "Скрытность/Цель обездвижена" is disabled when range is not "Нулевая"
+  if (type === ModifierType.ADDITIONAL_STEALTH && rangeType.value !== ModifierType.RANGE_ZERO) {
+    return true;
+  }
+
+  // "Скрытность/Цель обездвижена" is disabled when range is not "Нулевая"
+  if (type === ModifierType.ADDITIONAL_RANGE_PENALTY && (rangeType.value === ModifierType.RANGE_ZERO || rangeType.value === ModifierType.RANGE_SHORT)) {
+    return true;
+  }
+
+  return false;
 }
 
 function getModifierColorClass(value: number): string {
@@ -115,6 +168,21 @@ function getModifierText(value: number): string {
   if (value > 0) return `+${value}`;
   return String(value);
 }
+
+watch(fireType, (nv) => {
+  if (nv === ModifierType.FIRE_TYPE_SNAP) {
+    additionalSelection.value = additionalSelection.value.filter(t => t !== ModifierType.ADDITIONAL_USHOR);
+  }
+})
+
+watch(rangeType, (nv) => {
+  if (nv === ModifierType.RANGE_ZERO || nv === ModifierType.RANGE_SHORT) {
+    additionalSelection.value = additionalSelection.value.filter(t => t !== ModifierType.ADDITIONAL_RANGE_PENALTY);
+  }
+  if (nv === ModifierType.RANGE_SHORT) {
+    additionalSelection.value = additionalSelection.value.filter(t => t !== ModifierType.ADDITIONAL_STEALTH);
+  }
+})
 </script>
 
 <template>
@@ -126,13 +194,13 @@ function getModifierText(value: number): string {
           <div class="radio-group">
             <label
               v-for="option in fireTypeModifiers"
-              :key="option.id"
+              :key="option.type"
               class="radio-option"
             >
               <input
                 type="radio"
-                :value="option.id"
-                v-model="fireTypeId"
+                :value="option.type"
+                v-model="fireType"
                 name="fireType"
               />
               {{ option.label }} (
@@ -149,13 +217,16 @@ function getModifierText(value: number): string {
           <div class="checkbox-group">
             <label
               v-for="option in additionalModifiers"
-              :key="option.id"
+              :key="option.type"
               class="checkbox-option"
+              :class="{ 'disabled': isAdditionalOptionDisabled(option.type) }"
             >
               <input
                 type="checkbox"
-                :value="option.id"
-                @change="handleAdditionalToggle(option.id, ($event.target as HTMLInputElement).checked)"
+                :value="option.type"
+                :checked="additionalSelection.some((item) => item === option.type)"
+                :disabled="isAdditionalOptionDisabled(option.type)"
+                @change="handleAdditionalToggle(option.type, ($event.target as HTMLInputElement).checked)"
               />
               {{ option.label }} (
                 <span :class="getModifierColorClass(option.value)">
@@ -173,13 +244,13 @@ function getModifierText(value: number): string {
           <div class="radio-group">
             <label
               v-for="option in rangeModifiers"
-              :key="option.id"
+              :key="option.type"
               class="radio-option"
             >
               <input
                 type="radio"
-                :value="option.id"
-                v-model="rangeId"
+                :value="option.type"
+                v-model="rangeType"
                 name="range"
               />
               {{ option.label }} (
@@ -196,13 +267,13 @@ function getModifierText(value: number): string {
           <div class="radio-group">
             <label
               v-for="option in targetSizeModifiers"
-              :key="option.id"
+              :key="option.type"
               class="radio-option"
             >
               <input
                 type="radio"
-                :value="option.id"
-                v-model="targetSizeId"
+                :value="option.type"
+                v-model="targetSizeType"
                 name="targetSize"
               />
               {{ option.label }} (
@@ -219,14 +290,14 @@ function getModifierText(value: number): string {
           <div class="situational-container">
             <div class="situational-subcolumn">
               <label
-                v-for="option in situationalModifiers.slice(0, 3)"
-                :key="option.id"
+                v-for="option in situationalModifiers.slice(0, situationalModifiers.length / 2)"
+                :key="option.type"
                 class="checkbox-option"
               >
                 <input
                   type="checkbox"
-                  :value="option.id"
-                  @change="handleSituationalToggle(option.id, ($event.target as HTMLInputElement).checked)"
+                  :value="option.type"
+                  @change="handleSituationalToggle(option.type, ($event.target as HTMLInputElement).checked)"
                 />
                 {{ option.label }} (
                   <span :class="getModifierColorClass(option.value)">
@@ -237,14 +308,14 @@ function getModifierText(value: number): string {
             </div>
             <div class="situational-subcolumn">
               <label
-                v-for="option in situationalModifiers.slice(3)"
-                :key="option.id"
+                v-for="option in situationalModifiers.slice(situationalModifiers.length / 2)"
+                :key="option.type"
                 class="checkbox-option"
               >
                 <input
                   type="checkbox"
-                  :value="option.id"
-                  @change="handleSituationalToggle(option.id, ($event.target as HTMLInputElement).checked)"
+                  :value="option.type"
+                  @change="handleSituationalToggle(option.type, ($event.target as HTMLInputElement).checked)"
                 />
                 {{ option.label }} (
                   <span :class="getModifierColorClass(option.value)">
@@ -263,6 +334,9 @@ function getModifierText(value: number): string {
         <strong :class="getModifierColorClass(totalModifier)">
           {{ getModifierText(totalModifier) }}
         </strong>
+      </p>
+      <p v-if="showWangingRangePenalties" class="note" :class="{ 'dark': isDark }">
+        <small>Внимание: штраф за нулевую дальность игнорируется из-за выбора "Цель обездвижена/Не знает где стрелок"</small>
       </p>
     </div>
   </div>
@@ -342,6 +416,11 @@ h4 {
   accent-color: var(--vp-c-indigo-1);
 }
 
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .negative {
   color: var(--vp-c-red-1);
   font-weight: bold;
@@ -388,6 +467,16 @@ h4 {
 
 .total-section strong {
   font-size: 24px;
+}
+
+.note {
+  margin-top: 5px;
+  font-size: 12px;
+  color: var(--vp-c-text-2);
+}
+
+.dark .note {
+  color: var(--vp-c-text-2);
 }
 
 @media (max-width: 768px) {

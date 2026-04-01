@@ -110,6 +110,11 @@ function getModifierColorClass(value: number): string {
   if (value > 0) return 'positive';
   return 'neutral';
 }
+
+function getModifierText(value: number): string {
+  if (value > 0) return `+${value}`;
+  return String(value);
+}
 </script>
 
 <template>
@@ -132,7 +137,7 @@ function getModifierColorClass(value: number): string {
               />
               {{ option.label }} (
                 <span :class="getModifierColorClass(option.value)">
-                  {{ option.value > 0 ? '+' : '' }}{{ option.value }}
+                  {{ getModifierText(option.value) }}
                 </span>
               )
             </label>
@@ -154,7 +159,7 @@ function getModifierColorClass(value: number): string {
               />
               {{ option.label }} (
                 <span :class="getModifierColorClass(option.value)">
-                  {{ option.value > 0 ? '+' : '' }}{{ option.value }}
+                  {{ getModifierText(option.value) }}
                 </span>
               )
             </label>
@@ -179,7 +184,7 @@ function getModifierColorClass(value: number): string {
               />
               {{ option.label }} (
                 <span :class="getModifierColorClass(option.value)">
-                  {{ option.value > 0 ? '+' : '' }}{{ option.value }}
+                  {{ getModifierText(option.value) }}
                 </span>
               )
             </label>
@@ -202,7 +207,7 @@ function getModifierColorClass(value: number): string {
               />
               {{ option.label }} (
                 <span :class="getModifierColorClass(option.value)">
-                  {{ option.value > 0 ? '+' : '' }}{{ option.value }}
+                  {{ getModifierText(option.value) }}
                 </span>
               )
             </label>
@@ -225,7 +230,7 @@ function getModifierColorClass(value: number): string {
                 />
                 {{ option.label }} (
                   <span :class="getModifierColorClass(option.value)">
-                    {{ option.value > 0 ? '+' : '' }}{{ option.value }}
+                    {{ getModifierText(option.value) }}
                   </span>
                 )
               </label>
@@ -243,7 +248,7 @@ function getModifierColorClass(value: number): string {
                 />
                 {{ option.label }} (
                   <span :class="getModifierColorClass(option.value)">
-                    {{ option.value > 0 ? '+' : '' }}{{ option.value }}
+                    {{ getModifierText(option.value) }}
                   </span>
                 )
               </label>
@@ -256,7 +261,7 @@ function getModifierColorClass(value: number): string {
     <div class="total-section" :class="{ 'dark': isDark }">
       <p>Сумма модификаторов:
         <strong :class="getModifierColorClass(totalModifier)">
-          {{ totalModifier > 0 ? '+' : '' }}{{ totalModifier }}
+          {{ getModifierText(totalModifier) }}
         </strong>
       </p>
     </div>

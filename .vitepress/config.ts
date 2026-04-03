@@ -144,6 +144,7 @@ export default defineConfig({
             items: [
               { text: 'Генератор имён', link: 'names' },
               { text: 'Калькулятор стрельбы', link: 'shooting' },
+              { text: 'Планетароное время', link: 'times' },
             ]
           }
         ]

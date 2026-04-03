@@ -6,6 +6,7 @@ import DefaultTheme from 'vitepress/theme';
 import CoinAnimation from './components/CoinAnimation.vue';
 import HHFeature from './components/HHFeature.vue';
 import ShootMods from './components/ShootMods.vue';
+import PlanetTimes from './components/PlanetTimes.vue';
 import { useSidebarToggle } from './hooks/sidebar';
 
 import './styles/index.css';
@@ -22,6 +23,7 @@ export default {
   enhanceApp({ app }) {
     app.component('HHFeature', HHFeature);
     app.component('ShootMods', ShootMods);
+    app.component('PlanetTimes', PlanetTimes);
     useSidebarToggle()
   },
 } satisfies Theme;

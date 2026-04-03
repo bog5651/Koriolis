@@ -151,7 +151,7 @@ const formatMinutesTime = (totalMinutes: number) =>  {
           <h3>Результат</h3>
           <div class="result-box">
             <p>
-              {{selectedConversion === 'earthToPlanet' ? 'Время на планете:' : 'Время на земле'}}
+              {{selectedConversion === 'earthToPlanet' ? 'Время на планете: ' : 'Время на земле: '}}
               <strong>
                 {{ formatTime(convertedTime.hours, convertedTime.minutes) }}
               </strong>
